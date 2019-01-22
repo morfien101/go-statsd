@@ -1,33 +1,102 @@
-//package statsd
-//
-//import (
-//	"net"
-//	"strconv"
-//	"testing"
-//	"time"
-//
-//	unix4ever "github.com/Unix4ever/statsd"
-//	cactus "github.com/cactus/go-statsd-client/statsd"
-//	"github.com/peterbourgon/g2s"
-//	quipo "github.com/quipo/statsd"
-//	ac "gopkg.in/alexcesaro/statsd.v2"
-//)
-//
-//const (
-//	addr        = ":0"
-//	prefix      = "metricPrefix."
-//	prefixNoDot = "metricPrefix"
-//	counterKey  = "foo.bar.counter"
-//	gaugeKey    = "foo.bar.gauge"
-//	gaugeValue  = 42
-//	timingKey   = "foo.bar.timing"
-//	timingValue = 153 * time.Millisecond
-//	flushPeriod = 100 * time.Millisecond
-//)
-//
-//type logger struct{}
-//
-//func (logger) Println(v ...interface{}) {}
+package statsd
+
+import (
+	"net"
+	"testing"
+	"time"
+	//	"strconv"
+	//	unix4ever "github.com/Unix4ever/statsd"
+	//	cactus "github.com/cactus/go-statsd-client/statsd"
+	//	"github.com/peterbourgon/g2s"
+	//	quipo "github.com/quipo/statsd"
+	//	ac "gopkg.in/alexcesaro/statsd.v2"
+)
+
+const (
+	addr        = ":0"
+	prefix      = "metricPrefix."
+	prefixNoDot = "metricPrefix"
+	counterKey  = "foo.bar.counter"
+	gaugeKey    = "foo.bar.gauge"
+	gaugeValue  = 42
+	timingKey   = "foo.bar.timing"
+	timingValue = 153 * time.Millisecond
+	flushPeriod = 100 * time.Millisecond
+)
+
+type logger struct{}
+
+func (logger) Println(v ...interface{}) {}
+
+func BenchmarkComplexDelivery(b *testing.B) {
+	inSocket, err := net.ListenUDP("udp4", &net.UDPAddr{
+		IP: net.IPv4(127, 0, 0, 1),
+	})
+	if err != nil {
+		b.Error(err)
+	}
+
+	go func() {
+		buf := make([]byte, 1500)
+		for {
+			_, err := inSocket.Read(buf)
+			if err != nil {
+				return
+			}
+		}
+
+	}()
+
+	client := NewClient(inSocket.LocalAddr().String(), MetricPrefix("foo."))
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		client.Incr("number.requests", 33)
+		client.Timing("another.value", 157)
+		client.PrecisionTiming("response.time.for.some.api", 150*time.Millisecond)
+		client.PrecisionTiming("response.time.for.some.api.case1", 150*time.Millisecond)
+	}
+
+	_ = client.Close()
+	_ = inSocket.Close()
+}
+
+func BenchmarkTagged(b *testing.B) {
+	inSocket, err := net.ListenUDP("udp4", &net.UDPAddr{
+		IP: net.IPv4(127, 0, 0, 1),
+	})
+	if err != nil {
+		b.Error(err)
+	}
+
+	go func() {
+		buf := make([]byte, 1500)
+		for {
+			_, err := inSocket.Read(buf)
+			if err != nil {
+				return
+			}
+		}
+
+	}()
+
+	client := NewClient(inSocket.LocalAddr().String(), MetricPrefix(prefixNoDot), MaxPacketSize(1432),
+		FlushInterval(flushPeriod), SendLoopCount(2), DefaultTags(StringTag("host", "foo")),
+		SendQueueCapacity(10), BufPoolCapacity(40))
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		client.Incr(counterKey, 1, StringTag("route", "api.one"), IntTag("status", 200))
+		client.Timing("another.value", 157, StringTag("service", "db"))
+		client.PrecisionTiming("response.time.for.some.api", 150*time.Millisecond, IntTag("status", 404))
+		client.PrecisionTiming("response.time.for.some.api.case1", 150*time.Millisecond, StringTag("service", "db"), IntTag("status", 200))
+	}
+	_ = client.Close()
+	_ = inSocket.Close()
+}
+
 //
 //func BenchmarkAlexcesaro(b *testing.B) {
 //	s := newServer()
