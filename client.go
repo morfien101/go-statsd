@@ -119,6 +119,9 @@ func NewClient(addr string, options ...Option) *Client {
 // same effect as calling it on the original client - it is stopped with all
 // its clones.
 func (c *Client) Close() error {
+	if c.trans == nil {
+		return nil
+	}
 	c.trans.close()
 	return nil
 }

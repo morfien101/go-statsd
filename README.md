@@ -1,11 +1,11 @@
 # go-statsd
 
-[![Build Status](https://travis-ci.org/smira/go-statsd.svg?branch=master)](https://travis-ci.org/smira/go-statsd)
-[![Documentation](https://godoc.org/github.com/smira/go-statsd?status.svg)](http://godoc.org/github.com/smira/go-statsd)
-[![Go Report Card](https://goreportcard.com/badge/github.com/smira/go-statsd)](https://goreportcard.com/report/github.com/smira/go-statsd)
-[![codecov](https://codecov.io/gh/smira/go-statsd/branch/master/graph/badge.svg)](https://codecov.io/gh/smira/go-statsd)
-[![License](https://img.shields.io/github/license/smira/go-statsd.svg?maxAge=2592000)](https://github.com/smira/go-statsd/LICENSE)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsmira%2Fgo-statsd.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsmira%2Fgo-statsd?ref=badge_shield)
+[![Build Status](https://travis-ci.org/morfien101/go-statsd.svg?branch=master)](https://travis-ci.org/morfien101/go-statsd)
+[![Documentation](https://godoc.org/github.com/morfien101/go-statsd?status.svg)](http://godoc.org/github.com/morfien101/go-statsd)
+[![Go Report Card](https://goreportcard.com/badge/github.com/morfien101/go-statsd)](https://goreportcard.com/report/github.com/morfien101/go-statsd)
+[![codecov](https://codecov.io/gh/morfien101/go-statsd/branch/master/graph/badge.svg)](https://codecov.io/gh/morfien101/go-statsd)
+[![License](https://img.shields.io/github/license/morfien101/go-statsd.svg?maxAge=2592000)](https://github.com/morfien101/go-statsd/LICENSE)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmorfien101%2Fgo-statsd.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmorfien101%2Fgo-statsd?ref=badge_shield)
 
 Go statsd client library with zero allocation overhead, great performance and automatic
 reconnects.
@@ -122,16 +122,6 @@ Ideas were borrowed from the following stastd clients:
 * https://github.com/alexcesaro/statsd/ (MIT License, https://github.com/alexcesaro/statsd/blob/master/LICENSE)
 * https://github.com/armon/go-metrics (MIT License, https://github.com/armon/go-metrics/blob/master/LICENSE)
 
-## Talks
-
-I gave a talk about design and optimizations which went into go-statsd at
-[Gophercon Russia 2018](https://www.gophercon-russia.ru/):
-[slides](https://talks.godoc.org/github.com/smira/gopherconru2018/go-statsd.slide),
-[source](https://github.com/smira/gopherconru2018).
-
 ## License
 
 License is [MIT License](LICENSE).
-
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsmira%2Fgo-statsd.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsmira%2Fgo-statsd?ref=badge_large)
